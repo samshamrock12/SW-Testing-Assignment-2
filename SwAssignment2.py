@@ -15,19 +15,22 @@ def calculate_bmi(height, weight):
 
     return bmi, category
 
-def main():
-    print("Body Mass Index (BMI) Calculator")
+# app.py
+from flask import Flask, render_template, request
+from bmi_calculator import calculate_bmi
 
-    # Get user input
-    height = int(input("Enter height in inches: "))
-    weight = float(input("Enter weight in pounds: "))
+app = Flask(__name__)
 
-    # Calculate BMI
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/calculate', methods=['POST'])
+def calculate():
+    height = float(request.form['height'])
+    weight = float(request.form['weight'])
     bmi, category = calculate_bmi(height, weight)
+    return render_template('result.html', bmi=bmi, category=category)
 
-    # Display results
-    print(f"\nBMI Value: {bmi:.2f}")
-    print(f"BMI Category: {category}")
-
-if __name__ == "__main__":
-    main()
+if __name__ == '__main__':
+    app.run(debug=True)
